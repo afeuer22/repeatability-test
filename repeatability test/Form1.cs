@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Device.Gpio;
 using System.Timers;
 using System.Diagnostics;
+using System.Windows.Forms.VisualStyles;
 
 namespace repeatability_test
 {
@@ -32,11 +33,12 @@ namespace repeatability_test
             Totalwatch = Stopwatch.StartNew();
             while (true)
             {
-                textBox1.Text = (greenPresses + redPresses).ToString();
-                textBox2.Text = greenPresses.ToString();
-                textBox3.Text = redPresses.ToString();  
-                textBox4.Text = Cyclewatch.Elapsed.ToString();
-                textBox5.Text = (Totalwatch.Elapsed.TotalSeconds / (greenPresses + redPresses)).ToString();
+                textBox1.Invoke(new MethodInvoker (delegate{ textBox1.Text = (greenPresses + redPresses).ToString();}));
+                textBox2.Invoke(new MethodInvoker( delegate {textBox2.Text = greenPresses.ToString();}));
+                textBox3.Invoke(new MethodInvoker( delegate {textBox3.Text = redPresses.ToString();}));  
+                textBox4.Invoke(new MethodInvoker( delegate {textBox4.Text = Cyclewatch.Elapsed.ToString();}));
+                textBox5.Invoke(new MethodInvoker( 
+                delegate {textBox5.Text = (Totalwatch.Elapsed.TotalSeconds / (greenPresses + redPresses)).ToString();}));
                 rpi.RegisterCallbackForPinValueChangedEvent(GREENPIN, PinEventTypes.Falling | PinEventTypes.Rising, GreenButtonPress);
                 rpi.RegisterCallbackForPinValueChangedEvent(REDPIN, PinEventTypes.Falling | PinEventTypes.Rising, RedButtonPress);
             }
